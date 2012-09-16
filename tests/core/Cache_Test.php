@@ -1,0 +1,57 @@
+<?php 
+
+class Cache_Test extends PHPUnit_Framework_TestCase
+{
+	protected $cache;
+    protected $user_m;
+
+    public function setUp()
+    {
+    	$this->cache = new Quick\Cache();
+        $this->user_m = new Quick\Cache\Mock\User;
+    }
+
+    public function test_set(/* $key, $value */)
+    {
+    	$this->assertTrue($this->cache->set('bob', 'builder'));
+    }
+
+    public function test_get(/* $key */)
+    {
+    	$this->assertTrue($this->cache->get('bob'));
+    }
+
+    public function test_forget(/* $key */)
+    {
+        $this->assertTrue($this->cache->forget('bob'));
+    }
+
+    public function test_method_string(/* $class, $method, $args = array(), $ttl = null */)
+    {
+    	$this->assertEquals(
+    		$this->cache->method('Quick\Cache\Mock\User', 'get_by_email', array('billy@thekid.com'), 20), 
+    		array('first' => 'Billy', 'last' => 'the Kid'));
+    }
+
+    public function test_method_object(/* $class, $method, $args = array(), $ttl = null */)
+    {
+        $this->assertEquals(
+            $this->cache->method($this->user_m, 'get_by_email', array('billy@thekid.com'), 20), 
+            array('first' => 'Billy', 'last' => 'the Kid'));
+    }
+
+    public function test_clear_method(/* $class, $method */)
+    {
+        $this->assertTrue($this->cache->clear('Quick\Cache\Mock\User', 'get_by_email'));
+    }
+
+    public function test_clear_all(/* $class */)
+    {
+        $this->assertTrue($this->cache->clear('Quick\Cache\Mock\User'));
+    }
+
+    public function test_flush()
+    {
+        $this->assertTrue($this->cache->flush());
+    }
+}
