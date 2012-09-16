@@ -18,7 +18,7 @@ class Cache_Test extends PHPUnit_Framework_TestCase
 
     public function test_get(/* $key */)
     {
-    	$this->assertTrue($this->cache->get('bob'));
+    	$this->assertEquals($this->cache->get('bob'), 'builder');
     }
 
     public function test_forget(/* $key */)

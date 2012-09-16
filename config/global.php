@@ -2,5 +2,5 @@
 
 return array(
 			'driver' 		=> 'file',
-			'expiration' 	=> 48, // expiration in hours
+			'expiration' 	=> 86400, // expiration in seconds
 			);

@@ -24,7 +24,7 @@ class Cache
 	 */
 	public function set($key, $value)
 	{
-		return $this->driver->set($key, $value);
+		return $this->driver->set($key, serialize($value));
 	}
 
 	/**
@@ -35,7 +35,7 @@ class Cache
 	 */
 	public function get($key)
 	{
-		return $this->driver->get($key);
+		return unserialize($this->driver->get($key));
 	}
 
 	/**
@@ -55,10 +55,29 @@ class Cache
 	 * @param string|object $class 	Either a namespace class or an object
 	 * @param string 		$method	The method to call
 	 * @param array  		$args	The arguments to pass to the method
+	 * @param integer		$ttl	The time to live (seconds) will only be set on the first call for a method
 	 * @return
 	 */
 	public function method($class, $method, $args = array(), $ttl = null)
 	{
+		$class_name = is_string($class) ? $class : get_class($class);
+
+		$identifier = array(
+			'class' => $class_name, 
+			'method' => $method, 
+			'args' => $args
+			);
+
+		// do we have the data cached already?
+		$result = $this->driver->get_method($identifier);
+
+		if ($result['status'])
+		{
+			// yep, we had it
+			return unserialize($result['data']);
+		}
+
+		// no data found, run the method
 		if (is_string($class))
 		{
 			$class = new $class;
@@ -66,9 +85,12 @@ class Cache
 
 		$data = call_user_func_array(array($class, $method), $args);
 
-		$identifier = array($class, $method, $args);
+		$data_string = serialize($data);
 
-		return $this->driver->method($data, $identifier, $ttl);
+		// now cache the newfound data and return it
+		$this->driver->set_method($identifier, $data_string, $ttl);
+
+		return $data;
 	}
 
 	/**
@@ -84,7 +106,8 @@ class Cache
 	}
 
 	/**
-	 * Clear all cached items for this driver
+	 * Clear all cached items for this driver. Example use would be when you move
+	 * a site to production. This can be intensive so don't use it regularly
 	 * 
 	 * @return  bool
 	 */
