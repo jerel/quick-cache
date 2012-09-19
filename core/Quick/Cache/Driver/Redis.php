@@ -165,7 +165,7 @@ class Redis
 	 * @param  array 	$args 
 	 * @return string	The unique hash
 	 */
-	public function _hash($args)
+	private function _hash($args)
 	{
 		return md5(implode('|', $args));
 	}
