@@ -6,7 +6,7 @@ class Redis_Test extends PHPUnit_Framework_TestCase
 
 	public function setUp()
 	{
-		$this->redis = new Quick\Cache\Driver\Redis;
+		$this->redis = new Quick\Cache\Driver\Redis(new Quick\Cache\Config);
 	}
 
 	public function test_set_and_get()

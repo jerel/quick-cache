@@ -5,14 +5,34 @@ use Quick\Cache\Config;
 class Cache
 {
 	protected $driver;
+	protected $config;
 
-	public function __construct()
+	public function __construct($config = array())
 	{
-		$config = new Config;
+		// instantiates the object and sets the defaults from the config files
+		$this->config = new Config;
 
-		$driver_class = 'Quick\Cache\Driver\\' . ucfirst($config->get('driver'));
+		// add config items / replace defaults with passed values
+		$this->config->set_many($config);
 
-		$this->driver = new $driver_class;
+		$driver_class = 'Quick\Cache\Driver\\' . ucfirst($this->config->get('driver'));
+
+		$this->driver = new $driver_class($this->config);
+	}
+
+	/**
+	 * Returns this instance of the config library so the values 
+	 * can be modified for this instance of the cache
+	 *
+	 * $cache = new Quick\Cache;
+	 * $config = $cache->config_instance();
+	 *
+	 * $config->set('connection', array('host'...));
+	 * @return  object
+	 */
+	public function config_instance()
+	{
+		return $this->config;
 	}
 
 	/**

@@ -1,15 +1,14 @@
 <?php namespace Quick\Cache\Driver;
 
-use Quick\Cache\Config;
-
 class Redis
 {
 	protected $config;
 	protected $redis;
 
-	public function __construct()
+	public function __construct($config)
 	{
-		$this->config = new Config();
+		// the config object instantiated by the Cache library
+		$this->config = $config;
 		$this->config->load('redis');
 
 		$connection = $this->config->get('redis_connection');

@@ -6,7 +6,7 @@ class File_Test extends PHPUnit_Framework_TestCase
 
 	public function setUp()
 	{
-		$this->file = new Quick\Cache\Driver\File;
+		$this->file = new Quick\Cache\Driver\File(new Quick\Cache\Config);
 	}
 
 	public function test_set_and_get()

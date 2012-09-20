@@ -1,18 +1,15 @@
 <?php namespace Quick\Cache\Driver;
 
-use Quick\Cache\Config;
-
 class File
 {
 	protected $config;
-	protected $cache_path;
 
-	public function __construct()
+	public function __construct($config)
 	{
-		$this->config = new Config();
-		$this->config->load('file');
+		// the config object instantiated by the Cache library
+		$this->config = $config;
 
-		$this->cache_path = $this->config->get('cache_path');
+		$this->config->load('file');
 	}
 
 	public function set($key, $value)
@@ -93,19 +90,21 @@ class File
 	 */
 	public function clear($class, $method)
 	{
+		$cache_path = $this->config->get('cache_path');
+
 		// we know which one we're clearing
 		if ($method)
 		{
 			$directory = $this->_prep_path($class, $method);
 
-			return (bool) $this->_delete_dir($this->cache_path.$directory);
+			return (bool) $this->_delete_dir($cache_path.$directory);
 		}
 		else
 		{
 			// we're clearing everything for this class
 			$directory = $this->_prep_path($class);
 
-			return (bool) $this->_delete_dir($this->cache_path.$directory);
+			return (bool) $this->_delete_dir($cache_path.$directory);
 		}
 	}
 
@@ -116,8 +115,10 @@ class File
 	 */
 	public function flush()
 	{
+		$cache_path = $this->config->get('cache_path');
+
 		// this may take a while, but they shouldn't be flushing in production
-		return (bool) $this->_delete_dir($this->cache_path);
+		return (bool) $this->_delete_dir($cache_path);
 	}
 
 	/**
@@ -128,13 +129,15 @@ class File
 	 */
 	public function exists($filename, $directory = null)
 	{
+		$cache_path = $this->config->get('cache_path');
+
 		if (is_null($directory))
 		{
-			$path = $this->cache_path.$this->config->get('object_dir').$filename.'.cache';
+			$path = $cache_path.$this->config->get('object_dir').$filename.'.cache';
 		}
 		else
 		{
-			$path = $this->cache_path.$directory.$filename.'.cache';
+			$path = $cache_path.$directory.$filename.'.cache';
 		}
 
 		return (bool) file_exists($path);
@@ -174,15 +177,17 @@ class File
 	 */
 	private function _write($filename, $data, $directory = null, $ttl = null)
 	{
+		$cache_path = $this->config->get('cache_path');
+
 		// did they provide a subdirectory to namespace the cache?
 		if ($directory)
 		{
-			$path = $this->cache_path.$directory.'/';
+			$path = $cache_path.$directory.'/';
 		}
 		else
 		{
 			// they didn't provide a directory so we set the directory used for simple object caching
-			$path = $this->cache_path.$this->config->get('object_dir');
+			$path = $cache_path.$this->config->get('object_dir');
 		}
 
 		if ( ! is_dir($path) and ! @mkdir($path, $this->config->get('dir_chmod'), true))
@@ -215,13 +220,15 @@ class File
 	 */
 	private function _read($filename, $directory = null)
 	{
+		$cache_path = $this->config->get('cache_path');
+
 		if (is_null($directory))
 		{
-			$path = $this->cache_path.$this->config->get('object_dir').$filename.'.cache';
+			$path = $cache_path.$this->config->get('object_dir').$filename.'.cache';
 		}
 		else
 		{
-			$path = $this->cache_path.$directory.$filename.'.cache';
+			$path = $cache_path.$directory.$filename.'.cache';
 		}
 
 		// nope. not here.
@@ -252,13 +259,15 @@ class File
 	 */
 	private function _delete($filename, $directory = null)
 	{
+		$cache_path = $this->config->get('cache_path');
+
 		if (is_null($directory))
 		{
-			$path = $this->cache_path.$this->config->get('object_dir').$filename.'.cache';
+			$path = $cache_path.$this->config->get('object_dir').$filename.'.cache';
 		}
 		else
 		{
-			$path = $this->cache_path.$directory.$filename.'.cache';
+			$path = $cache_path.$directory.$filename.'.cache';
 		}
 
 		// nope. not here.
@@ -275,8 +284,10 @@ class File
 	 */
 	private function _delete_dir($path = '')
 	{
+		$cache_path = $this->config->get('cache_path');
+
 		// make sure nobody can delete above the cache root
-		if (strpos($path, $this->cache_path) === false) return;
+		if (strpos($path, $cache_path) === false) return;
 
         if (is_file($path))
 		{

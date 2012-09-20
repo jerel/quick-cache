@@ -32,7 +32,8 @@ class Config
 		// load the file, but only once
 		if (is_file($file_name) and ! array_key_exists($file, $this->_loaded))
 		{
-			$this->set_many(require $file_name);
+			// the config file values are secondary to the config values that have already been set
+			$this->_config = array_merge(require $file_name, $this->_config);
 
 			$this->_loaded[$file] = true;
 
