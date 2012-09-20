@@ -191,6 +191,6 @@ class Redis
 	 */
 	private function _hash($args)
 	{
-		return md5(implode('|', array_keys($args)));
+		return md5(serialize($args));
 	}
 }
