@@ -11,7 +11,7 @@ class File_Test extends PHPUnit_Framework_TestCase
 
 	public function test_set_and_get()
 	{
-		$this->file->set('name', 'Jerel Unruh');
+		$this->file->set('name', 'Jerel Unruh', 3600);
 
 		$this->assertEquals($this->file->get('name'), 'Jerel Unruh');
 	}

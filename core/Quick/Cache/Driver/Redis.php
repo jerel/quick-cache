@@ -21,16 +21,41 @@ class Redis
 			);
 	}
 
-	public function set($key, $value)
+	/**
+	 * Set a simple key:value
+	 * 
+	 * @param string	 $key   The key to retrieve the value with later
+	 * @param string	 $value A serialized string to store
+	 * @param int		 $ttl   Seconds to live before expiration
+	 */
+	public function set($key, $value, $ttl)
 	{
-		return (bool) $this->redis->set($key, $value);
+		// if no ttl is provided use the default
+		if (is_null($ttl)) $ttl = $this->config->get('expiration');
+
+		return (bool) $this->redis->pipeline(function($pipe) use ($key, $value, $ttl){
+			$pipe->set($key, $value);
+			$pipe->expire($key, $ttl);
+		});
 	}
 
+	/**
+	 * Get your cached value
+	 * 
+	 * @param  string	$key
+	 * @return string	A serialized string to be unserialized by the cache lib
+	 */
 	public function get($key)
 	{
 		return $this->redis->get($key);
 	}
 
+	/**
+	 * Delete a value by its key
+	 * 
+	 * @param  string	$key Take a guess Watson.
+	 * @return bool
+	 */
 	public function forget($key)
 	{
 		return (bool) $this->redis->del($key);

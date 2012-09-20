@@ -12,13 +12,26 @@ class File
 		$this->config->load('file');
 	}
 
-	public function set($key, $value)
+	/**
+	 * Set a simple key:value
+	 * 
+	 * @param string	 $key   The key to retrieve the value with later
+	 * @param string	 $value A serialized string to store
+	 * @param int		 $ttl   Seconds to live before expiration
+	 */
+	public function set($key, $value, $ttl)
 	{
 		$filename = $this->_hash(array($key));
 
-		return (bool) $this->_write($filename, $value);
+		return (bool) $this->_write($filename, $value, null, $ttl);
 	}
 
+	/**
+	 * Get your cached value
+	 * 
+	 * @param  string	$key
+	 * @return string	A serialized string to be unserialized by the cache lib
+	 */
 	public function get($key)
 	{
 		$filename = $this->_hash(array($key));
@@ -26,6 +39,12 @@ class File
 		return $this->_read($filename);
 	}
 
+	/**
+	 * Delete a value by its key
+	 * 
+	 * @param  string	$key Take a guess.
+	 * @return bool
+	 */
 	public function forget($key)
 	{
 		$filename = $this->_hash(array($key));

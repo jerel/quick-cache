@@ -11,7 +11,7 @@ class Redis_Test extends PHPUnit_Framework_TestCase
 
 	public function test_set_and_get()
 	{
-		$this->redis->set('name', 'Jerel Unruh');
+		$this->redis->set('name', 'Jerel Unruh', 3600);
 
 		$this->assertEquals($this->redis->get('name'), 'Jerel Unruh');
 	}

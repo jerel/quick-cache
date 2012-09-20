@@ -28,6 +28,7 @@ class Cache
 	 * $config = $cache->config_instance();
 	 *
 	 * $config->set('connection', array('host'...));
+	 * 
 	 * @return  object
 	 */
 	public function config_instance()
@@ -39,12 +40,13 @@ class Cache
 	 * Cache a key/value item
 	 * 
 	 * @param 	string 			$key
-	 * @param 	string|array 	$value The value to cache
+	 * @param 	string|array 	$value	The value to cache
+	 * @param	integer			$ttl	Lifetime in seconds
 	 * @return	bool
 	 */
-	public function set($key, $value)
+	public function set($key, $value, $ttl = null)
 	{
-		return $this->driver->set($key, serialize($value));
+		return $this->driver->set($key, serialize($value), $ttl);
 	}
 
 	/**
