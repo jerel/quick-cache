@@ -21,6 +21,19 @@ class Redis_Test extends PHPUnit_Framework_TestCase
 		$this->assertEquals($this->redis->forget('name'), 1);
 	}
 
+	/**
+	 * @medium
+	 */
+	public function test_check_ttl()
+	{
+		$this->redis->set('my_key', 'my lock', 1 /* one second */);
+		$this->assertEquals($this->redis->get('my_key'), 'my lock');
+
+		sleep(2);
+
+		$this->assertNull($this->redis->get('my_key'));
+	}
+
 	public function test_set_method()
 	{
 		$this->assertEquals($this->redis->set_method(

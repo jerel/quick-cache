@@ -7,7 +7,7 @@ class Cache_Test extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-    	$this->cache = new Quick\Cache();
+    	$this->cache = new Quick\Cache(/* array('driver' => 'redis') */);
         $this->user_m = new Quick\Cache\Mock\User;
     }
 
@@ -38,6 +38,13 @@ class Cache_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             $this->cache->method($this->user_m, 'get_by_email', array('billy@thekid.com'), 20), 
             array('first' => 'Billy', 'last' => 'the Kid'));
+    }
+
+    public function test_method_no_args(/* $class, $method, $args = array(), $ttl = null */)
+    {
+        $this->assertEquals(
+            $this->cache->method($this->user_m, 'get'), 
+            'jimbobjones');
     }
 
     public function test_clear_method(/* $class, $method */)

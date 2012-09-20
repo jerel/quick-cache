@@ -21,6 +21,19 @@ class File_Test extends PHPUnit_Framework_TestCase
 		$this->assertEquals($this->file->forget('name'), 1);
 	}
 
+	/**
+	 * @medium
+	 */
+	public function test_check_set_ttl()
+	{
+		$this->file->set('my_key', 'my lock', 1 /* one second */);
+		$this->assertEquals($this->file->get('my_key'), 'my lock');
+
+		sleep(2);
+
+		$this->assertNull($this->file->get('my_key'));
+	}
+
 	public function test_set_method()
 	{
 		$this->assertEquals($this->file->set_method(

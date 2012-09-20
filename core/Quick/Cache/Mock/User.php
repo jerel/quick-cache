@@ -6,4 +6,9 @@ class User
 	{
 		return array('first' => 'Billy', 'last' => 'the Kid');
 	}
+
+	public function get()
+	{
+		return 'jimbobjones';
+	}
 }
