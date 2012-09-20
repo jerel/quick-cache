@@ -148,7 +148,7 @@ class File
 	 */
 	private function _hash($args)
 	{
-		return md5(implode('|', $args));
+		return md5(implode('|', array_keys($args)));
 	}
 
 	/**
@@ -185,7 +185,7 @@ class File
 			$path = $this->cache_path.$this->config->get('object_dir');
 		}
 
-		if ( ! is_dir($path) and ! mkdir($path, $this->config->get('dir_chmod'), true))
+		if ( ! is_dir($path) and ! @mkdir($path, $this->config->get('dir_chmod'), true))
 		{
 			throw new \QuickCacheException($path.' is not writable and cannot be created.');
 		}
