@@ -11,6 +11,11 @@ class Cache_Test extends PHPUnit_Framework_TestCase
         $this->user_m = new Quick\Cache\Mock\User;
     }
 
+    public function test_config_instance()
+    {
+        $this->assertObjectHasAttribute('_config', $this->cache->config_instance());
+    }
+
     public function test_set(/* $key, $value */)
     {
     	$this->assertTrue($this->cache->set('bob', 'builder'));

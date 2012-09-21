@@ -11,6 +11,16 @@ class Redis
 		$this->config = $config;
 		$this->config->load('redis');
 
+		$this->connect();
+	}
+
+	/**
+	 * Start the redis connection
+	 * 
+	 * @return void
+	 */
+	public function connect()
+	{
 		$connection = $this->config->get('redis_connection');
 		$params = array('prefix' => $this->config->get('redis_prefix').':');
 
