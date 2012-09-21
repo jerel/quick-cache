@@ -1,6 +1,6 @@
 # Quick Cache
 
-A quick and easy to use driver based caching library that will cache simple key/value pairs or call methods and cache their results.
+A quick and easy to use PSR-2 driver based caching library that will cache simple key/value pairs or call methods and cache their results.
 
 ### Includes Drivers For
 
