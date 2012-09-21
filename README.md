@@ -83,6 +83,9 @@ At the same time we can run another instance with different configurations
 		'redis_prefix' => 'cache',
 	));
 
+	// if you set the connection details manually you must refresh the connection
+	$redis_cache->connect();
+
 Other methods
 
 	$cache_path = $config->get('cache_path');
@@ -102,6 +105,8 @@ If not you can run them via phpUnit
 
 	cd ./vendor/quick/cache
 	phpunit --colors --bootstrap tests/bootstrap.php --strict --debug --verbose tests
+
+Do not run these tests on a production environment! It will *FLUSH* your database!
 
 ## Errors
 

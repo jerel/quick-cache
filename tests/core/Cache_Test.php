@@ -17,11 +17,18 @@ class Cache_Test extends PHPUnit_Framework_TestCase
     {
         $this->cache = new Quick\Cache(/* array('driver' => 'redis') */);
         $this->user_m = new Quick\Cache\Mock\User;
+
+        $this->cache->strict = true;
     }
 
     public function test_config_instance()
     {
         $this->assertObjectHasAttribute('_config', $this->cache->config_instance());
+    }
+
+    public function test_connect()
+    {
+        $this->assertNull($this->cache->connect());
     }
 
     public function test_set(/* $key, $value */)

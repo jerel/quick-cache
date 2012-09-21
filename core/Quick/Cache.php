@@ -14,6 +14,7 @@ class Cache
 {
     protected $driver;
     protected $config;
+    public    $strict; // used for testing only
 
     public function __construct($config = array())
     {
@@ -26,6 +27,19 @@ class Cache
         $driver_class = 'Quick\Cache\Driver\\' . ucfirst($this->config->get('driver'));
 
         $this->driver = new $driver_class($this->config);
+    }
+
+    /**
+     * (Re?)connects to the database. Useful if connection parameters
+     * change or are set after the driver class is instantiated
+     *
+     * @return  void
+     */
+    public function connect()
+    {
+    	if (method_exists($this->driver, 'connect')) {
+    		$this->driver->connect();
+    	}
     }
 
     /**
@@ -117,6 +131,13 @@ class Cache
 
         // now cache the newfound data and return it
         $this->driver->set_method($identifier, $data_string, $ttl);
+
+        // if we are testing we drop out of "return the correct data at any cost mode" 
+        // and instead make sure that our write was successful
+        if ($this->strict) {
+            $result = $this->driver->get_method($identifier);
+            return unserialize($result['data']);
+        }
 
         return $data;
     }

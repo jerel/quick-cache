@@ -98,6 +98,9 @@ class Redis
         // does a cache exist for this method?
         $exists = $this->redis->exists($key);
 
+        // if no ttl is provided use the default
+        if (is_null($ttl)) $ttl = $this->config->get('expiration');
+
         $this->redis->pipeline(function($pipe) use ($class, $method, $key, $field, $data, $exists, $ttl) {
             $pipe->hset($key, $field, $data);
 
