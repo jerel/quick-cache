@@ -2,6 +2,8 @@
 
 A quick and easy to use PSR-2 driver based caching library that will cache simple key/value pairs or call methods and cache their results.
 
+[![Build Status](https://secure.travis-ci.org/jerel/quick-cache.png)](http://travis-ci.org/jerel/quick-cache)
+
 ### Includes Drivers For
 
 * Redis (using the fantastic predis library)
