@@ -104,7 +104,7 @@ Quick Cache is unit tested using phpUnit. I use Guard to run my tests while I wo
 If not you can run them via phpUnit
 
 	cd ./vendor/quick/cache
-	phpunit --colors --bootstrap tests/bootstrap.php --strict --debug --verbose tests
+	phpunit
 
 Do not run these tests on a production environment! It will *FLUSH* your database!
 
