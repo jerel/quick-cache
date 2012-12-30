@@ -104,13 +104,14 @@ class Cache
      */
     public function method($class, $method, $args = array(), $ttl = null)
     {
-        $class_name = is_string($class) ? $class : get_class($class);
+        // Ensure that the class is a string
+        is_string($class) or $class = get_class($class);
 
         $identifier = array(
-            'class' => $class_name,
+            'class' => $class,
             'method' => $method,
             'args' => $args
-            );
+        );
 
         // do we have the data cached already?
         $result = $this->driver->get_method($identifier);
@@ -122,10 +123,10 @@ class Cache
 
         // no data found, run the method
         if (is_string($class)) {
-            $class = new $class;
+            $object = new $class;
         }
 
-        $data = call_user_func_array(array($class, $method), $args);
+        $data = call_user_func_array(array($object, $method), $args);
 
         $data_string = serialize($data);
 
