@@ -7,7 +7,10 @@ A quick and easy to use PSR-2 driver based caching library that will cache simpl
 ### Includes Drivers For
 
 * Redis (using the fantastic predis library)
+* APC (requires APC installation / extension) <sup>*</sup>
 * Filesystem
+
+<sup>*</sup> APC driver doesn't support clearing class/method caches manually via ```$cache->clear()```.
 
 ### Author
 
@@ -87,6 +90,12 @@ At the same time we can run another instance with different configurations
 
 	// if you set the connection details manually you must refresh the connection
 	$redis_cache->connect();
+
+	// Create an APC driver instance
+	$apc_cache = new Quick\Cache(array('driver' => 'apc'));
+
+	$apc_cache->set('name', 'Jerel Unruh', 3600);
+
 
 Other methods
 
